@@ -1,10 +1,12 @@
 import fs from "fs";
+import Path from "../path.js";
+const path = Path;
 
 export default class ProductManager {
   #lastId = 0;
 
-  constructor(path) {
-    this.path = path;
+  constructor() {
+    this.path = `${path}/json/productos.json`;
   }
 
   async #newId() {

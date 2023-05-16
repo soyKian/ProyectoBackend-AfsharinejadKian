@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import ProductManager from "../componentes/product.manager.js";
-const productManager = new ProductManager("../Desafio3/productos.json");
+const productManager = new ProductManager;
 
 router.get("/", async (req, res) => {
   try {
@@ -19,20 +19,6 @@ router.get("/:id", async (req, res) => {
     const product = await productManager.getProductById(Number(id));
     if (product) {
       res.status(200).json({ message: "Producto encontrado", product });
-    } else {
-      res.status(400).send("Producto no encontrado");
-    }
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-});
-
-router.get("/", async (req, res) => {
-  try {
-    const { id } = req.query;
-    const product = await productManager.getProductById(Number(id));
-    if (product) {
-      res.status(200).json({ message: "Producto encontrado ", product });
     } else {
       res.status(400).send("Producto no encontrado");
     }
