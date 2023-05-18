@@ -1,12 +1,11 @@
 import fs from "fs";
-import Path from "../path.js";
-const path = Path;
+import { __dirname } from "../path.js";
 
 export default class CartManager {
   #lastId = 0;
 
   constructor() {
-    this.path = `${path}/json/carrito.json`;
+    this.pathFile = __dirname + "/json/carrito.json";
   }
 
   async #newId() {

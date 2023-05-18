@@ -1,10 +1,14 @@
 <h2>Socket cliente</h2>
 
 <form id="form">
-    <label>Nombre Producto:</label><input type="text" name="name" id="name">
+    <label>Nombre Producto:</label><input type="text" name="title" id="title">
     <label>Descripcion producto:</label><input type="text" name="description" id="description">
-    <label>Precio producto:</label><input type="text" name="price" id="price">
-    <input type="submit" value="SEND">
+    <label>Precio producto:</label><input type="number" name="price" id="price">
+    <label>Codigo del producto:</label><input type="text" name="code" id="code">
+    <label>Foto del producto (link):</label><input type="text" name="thumbnail" id="thumbnail">
+    <label>Categoria:</label><input type="text" name="category" id="category">
+    <label>Stock:</label><input type="number" name="stock" id="stock">
+    <input type="submit" value="Enviar">
 </form>
 
 <p id="products"></p>

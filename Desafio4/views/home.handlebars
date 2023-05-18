@@ -1,7 +1,7 @@
 {{#if products.length}}
     <h1>Lista de productos</h1>
     {{#each products}}
-        <div>
+        <div style="display:flex;">
            <div>
                 <p>Nombre del producto: {{this.title}}</p>
                 <p>Descripción: {{this.description}}</p>
@@ -11,7 +11,7 @@
                 <p>Stock del producto: {{this.stock}}</p>
            </div>
            <div>
-                <img src="{{this.thumbnails}}" alt="{{this.description}}">
+                <img style="width: 200px; height: 200px" src="{{this.thumbnail}}">
            </div>
         </div>
     {{/each}}

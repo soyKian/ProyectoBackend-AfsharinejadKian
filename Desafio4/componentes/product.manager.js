@@ -1,12 +1,11 @@
 import fs from "fs";
-import Path from "../path.js";
-const path = Path;
+import { __dirname } from "../path.js";
 
 export default class ProductManager {
   #lastId = 0;
 
   constructor() {
-    this.path = `${path}/json/productos.json`;
+    this.pathFile = __dirname + "/json/productos.json";
   }
 
   async #newId() {
@@ -23,8 +22,8 @@ export default class ProductManager {
 
   async getProducts() {
     try {
-      if (fs.existsSync(this.path)) {
-        const products = await fs.promises.readFile(this.path, "utf-8");
+      if (fs.existsSync(this.pathFile)) {
+        const products = await fs.promises.readFile(this.pathFile, "utf-8");
         const productsJSON = JSON.parse(products);
         return productsJSON;
       } else {
@@ -64,7 +63,7 @@ export default class ProductManager {
         };
         const productsFile = await this.getProducts();
         productsFile.push(product);
-        await fs.promises.writeFile(this.path, JSON.stringify(productsFile));
+        await fs.promises.writeFile(this.pathFile, JSON.stringify(productsFile));
         return product;
       }
     } catch (error) {
@@ -96,7 +95,7 @@ export default class ProductManager {
       } else {
         productsFile[index] = { id, ...obj };
       }
-      await fs.promises.writeFile(this.path, JSON.stringify(productsFile));
+      await fs.promises.writeFile(this.pathFile, JSON.stringify(productsFile));
     } catch (error) {
       console.log(error);
     }
@@ -112,7 +111,7 @@ export default class ProductManager {
 
       if (findProduct !== -1) {
         productFile.splice(findProduct, 1);
-        await fs.promises.writeFile(this.path, JSON.stringify(productFile));
+        await fs.promises.writeFile(this.pathFile, JSON.stringify(productFile));
         console.log(`Se elimino el producto id `, { productId });
       } else {
         console.log(`El producto id ${productId} no existe`);

@@ -7,7 +7,7 @@ const inputPrice = document.getElementById("price");
 const inputCode = document.getElementById("code");
 const inputCategory = document.getElementById("category");
 const inputStock = document.getElementById("stock");
-const inputThumbnails = document.getElementById("thumbnails");
+const inputThumbnail = document.getElementById("thumbnail");
 
 
 form.onsubmit = (e) => {
@@ -18,9 +18,9 @@ form.onsubmit = (e) => {
     const code = inputCode.value;
     const category = inputCategory.value;
     const stock = inputStock.value;
-    const thumbnails = inputThumbnails.value;
+    const thumbnail = inputThumbnail.value;
 
-    socketClient.emit("newProduct", { title, description, price, code, category, stock, thumbnails });
+    socketClient.emit("newProduct", { title, description, price, code, category, stock, thumbnail });
     return true;
 };
 
@@ -30,7 +30,7 @@ socketClient.on("getProducts", (products) => {
 
   products.forEach((product) => {
     data += `
-        <div>
+        <div style="display:flex; border:2px solid black;">
            <div>
                 <p>Nombre del producto: ${product.title}</p>
                 <p>Descripción: ${product.description}</p>
@@ -43,7 +43,7 @@ socketClient.on("getProducts", (products) => {
                 </div>
            </div>
            <div>
-                <img src="${product.thumbnails}" alt="${product.description}">
+                <img style="width: 200px; height: 200px" src="${product.thumbnail}" alt="${product.description}">
            </div>
         </div>
     `;

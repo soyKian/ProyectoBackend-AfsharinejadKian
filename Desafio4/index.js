@@ -1,10 +1,11 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import viewsRouter from "./routes/views.routes.js";
-import productsRouter from "./routes/products.router.js";
-import cartsRouter from "./routes/cart.router.js";
-import ProductManager from "./Managers/ProductManager.js";
+import viewsRouter from "./routes/views.router.js";
+// import productsRouter from "./routes/products.router.js";
+// import cartsRouter from "./routes/cart.router.js";
+import ProductManager from "./componentes/product.manager.js";
 
+import { Server } from "socket.io";
 import { __dirname } from "./path.js";
 
 const app = express();
@@ -49,7 +50,7 @@ socketServer.on("connection", async(socket) => {
       product.code,
       product.category,
       product.stock,
-      product.thumbnails
+      product.thumbnail
     );
     const products = await productManager.getProducts();
     socketServer.emit("getProducts", products);
