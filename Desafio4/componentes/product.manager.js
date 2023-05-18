@@ -35,37 +35,30 @@ export default class ProductManager {
   }
 
   //añadir productos
-  async addProduct(obj) {
+  async addProduct(
+    title,
+    description,
+    price,
+    code,
+    category,
+    stock,
+    thumbnail
+  ) {
     try {
-      const camposFaltantes = [];
-
-      if (!obj.title) {
-        camposFaltantes.push("title");
-      }
-      if (!obj.price) {
-        camposFaltantes.push("price");
-      }
-      if (!obj.stock) {
-        camposFaltantes.push("stock");
-      }
-      if (!obj.description) {
-        camposFaltantes.push("description");
-      }
-      if (!obj.code) {
-        camposFaltantes.push("code");
-      }
-      if (camposFaltantes.length > 0) {
-        console.log("Falta ingresar " + camposFaltantes.join(", "));
-      } else {
-        const product = {
-          id: (await this.#newId()) + 1,
-          ...obj,
-        };
-        const productsFile = await this.getProducts();
-        productsFile.push(product);
-        await fs.promises.writeFile(this.pathFile, JSON.stringify(productsFile));
-        return product;
-      }
+      const product = {
+        id: (await this.#newId()) + 1,
+        title,
+        description,
+        price,
+        thumbnail,
+        code,
+        category,
+        stock,
+      };
+      const productsFile = await this.getProducts();
+      productsFile.push(product);
+      await fs.promises.writeFile(this.pathFile, JSON.stringify(productsFile));
+      return product;
     } catch (error) {
       console.log(error);
     }
