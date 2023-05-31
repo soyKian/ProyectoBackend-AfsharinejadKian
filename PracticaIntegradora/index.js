@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(errorHandler);
 
-app.use("/api/products", productsRouter);
+app.use("/products", productsRouter);
 
 const PORT = 8080;
 
