@@ -2,12 +2,13 @@ import ProductsDaoMongo from "../daos/mongoDB/products.dao.js";
 const productsManager = new ProductsDaoMongo();
 
 
-export const getAllService = async () => {
+export const getAllService = async (page, limit, sort, filter) => {
   try {
-    const docs = await productsManager.getProducts();
+    const docs = await productsManager.getProducts(page, limit, sort, filter);
+    
     return docs;
   } catch (error) {
-        console.log(error);
+    console.log(error);
   }
 };
 

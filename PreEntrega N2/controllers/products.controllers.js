@@ -9,9 +9,30 @@ import {
   
   export const getController = async (req, res, next) => {
     try {
-      const { limit } = req.query;
-      const docs = await getAllProductsService(limit);
-      res.status(200).send(docs);
+      let { page, limit, sort, filter } = req.query;
+      page == null ? (page = 1) : (page = page);
+      const result = await getAllService(page, limit, sort, filter);
+      const prevPageLink = result.hasPrevPage
+        ? `http://localhost:8080/api/products?page=${result.prevPage}`
+        : null;
+      const nextPageLink = result.hasNextPage
+        ? `http://localhost:8080/api/products?page=${result.nextPage}`
+        : null;
+      res.json({
+        status: result ? "success" : "error",
+        payload: result.docs,
+        info: {
+          totalDocs: result.totalDocs,
+          totalPages: result.totalPages,
+          currPage: Number(page),
+          prevPage: result.prevPage,
+          nextPage: result.nextPage,
+          hasPrevPage: result.hasPrevPage,
+          hasNextPage: result.hasNextPage,
+          prevPageLink,
+          nextPageLink,
+        },
+      });
     } catch (error) {
       next(error);
     }

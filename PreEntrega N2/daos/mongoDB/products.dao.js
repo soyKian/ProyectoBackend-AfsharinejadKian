@@ -2,15 +2,26 @@ import { ProductsModel } from "./models/products.model.js";
 
 export default class ProductsDaoMongo {
 
-  async getProducts() {
+  async getProducts(page = 1, limit = 10, sort, filter) {
     try {
-      const response = await ProductsModel.find({});
-      return response;
+      if (sort == "asc" || sort == "desc") {
+        const response = await ProductsModel.paginate(
+          filter != undefined ? { category: filter } : {},
+          { page, limit, sort: { price: sort } }
+        );
+        return response;
+      } else if (sort != "asc" && sort != "desc") {
+        const response = await ProductsModel.paginate(
+          filter != undefined ? { category: filter } : {},
+          { page, limit }
+        );
+        return response;
+      }
     } catch (error) {
       console.log(error);
     }
   }
-
+  
   async getProductById(id) {
     try {
       const response = await ProductsModel.findById(id);
