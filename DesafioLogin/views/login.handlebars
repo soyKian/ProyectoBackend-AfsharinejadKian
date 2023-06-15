@@ -1,0 +1,19 @@
+<div
+  style="justify-content:center; align-items:center; align-content:center; display:grid; height:95vh;"
+>
+  <div
+    style="display:grid; background-color: grey; padding:0px 10px 10px 10px;"
+  >
+    <h1 style="text-align:center; color: white; ">LOGIN</h1>
+    <form action="/users/login" method="post">
+      Email:
+      <input type="email" name="email" id="email" />
+      Password:
+      <input type="password" name="password" id="password" />
+      <input type="submit" value="INGRESAR" />
+    </form>
+
+    <h2 style="text-align:center; color: white;">USUARIO NUEVO?</h2>
+    <button onclick="location.href='/views/register'">Ir a registro</button>
+  </div>
+</div>
