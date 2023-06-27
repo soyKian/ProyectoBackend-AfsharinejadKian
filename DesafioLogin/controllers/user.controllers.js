@@ -1,53 +1,133 @@
-const users = [
-    {
-      username: 'juan',
-      password : '1234',
-      admin: true,
-    },
-    {
-      username: 'jose',
-      password : '123456',
-      admin: false,
+import UsersDao from "../daos/user.daos.js";
+const userDao = new UsersDao();
+
+
+export const registerController = async (req, res, next) => {
+  try {
+    res.render("register");
+  } catch (error) {
+    next(error);
+  }
+};
+export const loginController = async (req, res, next) => {
+  try {
+    res.render("login");
+  } catch (error) {
+    next(error);
+  }
+};
+export const registerErrorController = async (req, res, next) => {
+  try {
+    res.render("registerError");
+  } catch (error) {
+    next(error);
+  }
+};
+export const loginErrorController = async (req, res, next) => {
+  try {
+    res.render("loginError");
+  } catch (error) {
+    next(error);
+  }
+};
+export const createUserController = async (req, res, next) => {
+  try {
+    const session = req.session;
+    if (!session) {
+      res.status(404).redirect("/views/register-error");
+    } else {
+      res.status(304).redirect("/views/login");
     }
-]
-
-
-export const login = (req, res) => {
-    const { username, password } = req.body;
-    const index = users.findIndex((aUser) => aUser.username === username && aUser.password === password);
-    console.log(index)
-    if(index < 0)
-      res.status(401).json({ msg: 'no estas autorizado' });
-    else {
-      const user = users[index];
-      req.session.info = {
-        loggedIn: true,
-        contador : 1,
-        username : user.username,
-        admin : user.admin,
+  } catch (error) {
+    next();
+  }
+};
+export const loginUserController = async (req, res, next) => {
+  try {
+    const userData = req.body;
+    const user = await userDao.loginUser(userData);
+    if (!user) {
+      res.status(404).redirect("/views/login-error");
+    } else {
+      const userId = await userDao.getUserById(req.session.passport.user);
+      const { firstName, lastName, email, age, role } = userId;
+      const userLogged = {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
       };
-      res.json({msg: 'Bienvenido!!'})
+      
+      req.session.user = userLogged;
+      console.log({message:"User logged in successfully!", session: req.session});
+      res.redirect("/products");
     }
-}
+  } catch (error) {
+    next(error);
+  }
+};
+export const logoutUserController = async (req, res, next) => {
+  try {
+     req.session.destroy((err) => {
+       if (err) {
+         console.log(err);
+       } else {
+         res.redirect("/views/login");
+         console.log("¡Logout successfuly!");
+       }
+     });
+  } catch (error) {
+    next(error);
+  }
+};
 
-export const visit = (req, res) => {
-    req.session.info.contador++;
-    res.json({
-      msg: `${req.session.info.username} ha visitado el sitio ${req.session.info.contador} veces`,
-    });
-}
-
-export const logout = (req, res) => {
-    req.session.destroy((err) => {
-      if (!err) res.send('Logout ok!');
-      else res.send({ status: 'Logout ERROR', body: err });
-    });
-}
-
-export const infoSession = (req, res) => {
-    res.send({
+export const githubResponse = async (req, res, next) => {
+  try {
+    const { firstName, lastName, email, role, isGithub } = req.user;
+    console.log({
+      message: "Register with Github successfull!",
       session: req.session,
-      sessionId: req.sessionID,
-      cookies: req.cookies,
+      userData: {
+        firstName,
+        lastName,
+        email,
+        role,
+        isGithub
+      },
     });
+    res.redirect("/products");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const loginResponse = async(req, res, next)=>{
+  try {
+      const user = await userDao.getById(req.session.passport.user);
+      const { first_name, last_name, email, age, role } = user;
+      res.json({
+          msg: 'Login OK',
+          session: req.session,
+          userData: {
+              first_name,
+              last_name,
+              email,
+              age,
+              role
+          }
+      })
+  } catch (error) {
+      next(error);
+  }
 }
+
+export const registerResponse = (req, res, next)=>{
+  try {
+      res.json({
+          msg: 'Register OK',
+          session: req.session    
+      })
+  } catch (error) {
+      next(error);
+  }
+};
